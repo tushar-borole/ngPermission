@@ -10,7 +10,7 @@ bower install ngPermission
 
 Install via npm:
 ```sh
-npm install ngPermission
+npm install ngpermission
 ```
 
 Add dependency to you module:
