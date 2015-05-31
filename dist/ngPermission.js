@@ -26,6 +26,4 @@ angular.module("ngPermission", []).run(['$rootScope', '$http', '$route', functio
         }
 
     });
-}]).service('ngPermissionAuthService', function(){
-
-});
+}]);
