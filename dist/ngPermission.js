@@ -17,7 +17,7 @@ angular.module("ngPermission", []).run(['$rootScope', '$http', '$route', functio
 
                     var defer = $q.defer();
                     $timeout(function () {
-                        $rootScope.$broadcast('ngPermission', config.authorizedRole,defer);
+                        $rootScope.$broadcast('ngPermission', config.authorizedRole,defer,config);
                         //defer.resolve();
                     }, 2000);
                     return defer.promise;
