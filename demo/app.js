@@ -20,12 +20,15 @@ config(['$routeProvider', function ($routeProvider) {
     });
 }]).controller('View1Ctrl', [function () {}]).controller('View2Ctrl', [function () {
 
-}]).run(['$rootScope', '$http', '$route', function ($rootScope, $http, $route) {
+}]).run(['$rootScope', '$timeout', '$route', function ($rootScope, $timeout, $route) {
 
     $rootScope.$on('ngPermission', function (event,roles, defer) {
         //alert("inn")
         console.log(roles)
-        defer.resolve();
+        $timeout(function(){
+             defer.resolve();
+        },2000)
+   
             // do what you want to do
     });
 }]);
