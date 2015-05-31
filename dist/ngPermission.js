@@ -24,9 +24,9 @@ angular.module("ngPermission", []).run(['$rootScope', '$http', '$route', functio
 
 
     //add dynamic resolve to function
-    angular.forEach($route.routes, function (config) {
+    angular.forEach($route.routes, function (config) {//itterate the route object to add config
 
-        if (angular.isDefined(config.authorizedRole)) {
+        if (angular.isDefined(config.authorizedRole)) {// if authorization present in config
 
             if (angular.isDefined(config.resolve)) { // if already resolve is present
                 config.resolve.auth = getRouteResolve(config);
