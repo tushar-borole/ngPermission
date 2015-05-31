@@ -9,11 +9,25 @@ angular.module('myApp', [
 config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/view2', {
         templateUrl: 'view2/view2.html',
-        controller: 'View2Ctrl'
+        controller: 'View2Ctrl',
     }).when('/view1', {
         templateUrl: 'view1/view1.html',
         controller: 'View1Ctrl',
-        authorizedRole: ['admin']
+        authorizedRole: ['admin'],
+          resolve:{
+            authsecond: ['$q', '$timeout', function ($q,$timeout) {
+
+                var defer = $q.defer();
+console.log("inn")
+                $timeout(function () {
+
+                    defer.resolve()
+                }, 2000)
+
+                return defer.promise;
+                }]
+
+        }
     });
     $routeProvider.otherwise({
         redirectTo: '/view1'
@@ -22,13 +36,13 @@ config(['$routeProvider', function ($routeProvider) {
 
 }]).run(['$rootScope', '$timeout', '$route', function ($rootScope, $timeout, $route) {
 
-    $rootScope.$on('ngPermission', function (event,roles, defer) {
+    $rootScope.$on('ngPermission', function (event, roles, defer) {
         //alert("inn")
         console.log(roles)
-        $timeout(function(){
-             defer.resolve();
-        },2000)
-   
-            // do what you want to do
+        $timeout(function () {
+            defer.resolve();
+        }, 5000)
+
+        // do what you want to do
     });
 }]);
