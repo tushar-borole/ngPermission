@@ -22,7 +22,11 @@
       <h1>
 <a id="ngpermission" class="anchor" href="#ngpermission" aria-hidden="true"><span class="octicon octicon-link"></span></a>ngPermission</h1>
 
-<p>Add authorization to angular route, so restriction route to specific tole becomes so easy.</p>
+<p>Add authorization to angular route, so restriction route to specific role becomes so easy.</p>
+
+<blockquote>
+<p>Note:- Works with <strong>ui.route</strong> as well as <strong>ngRoute</strong> :)</p>
+</blockquote>
 
 <p>Install via bower:</p>
 
@@ -36,13 +40,26 @@
 
 <div class="highlight highlight-javascript"><pre>angular.module(<span class="pl-s"><span class="pl-pds">"</span>your app name<span class="pl-pds">"</span></span>,[<span class="pl-s"><span class="pl-pds">"</span>ngPermission<span class="pl-pds">"</span></span>])</pre></div>
 
-<p>Add role permission to route:</p>
+<p>Add role permission to <strong>ngRoute</strong>:</p>
 
 <div class="highlight highlight-javascript"><pre>.when(<span class="pl-s"><span class="pl-pds">'</span>/view1<span class="pl-pds">'</span></span>, {
         templateUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>view1/view1.html<span class="pl-pds">'</span></span>,
         controller<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>View1Ctrl<span class="pl-pds">'</span></span>,
         authorizedRole<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">'</span>admin<span class="pl-pds">'</span></span>]
     })</pre></div>
+
+<p>Add role permission to <strong>ui.router</strong>:</p>
+
+<div class="highlight highlight-javascript"><pre> .state(<span class="pl-s"><span class="pl-pds">'</span>view1<span class="pl-pds">'</span></span>, {
+        templateUrl<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>view1/view1.html<span class="pl-pds">'</span></span>,
+        controller<span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>View1Ctrl<span class="pl-pds">'</span></span>,
+        resolve<span class="pl-k">:</span> {
+            authorization<span class="pl-k">:</span> [<span class="pl-s"><span class="pl-pds">"</span>ngPermissionService<span class="pl-pds">"</span></span>, <span class="pl-k">function</span> (<span class="pl-smi">ngPermissionService</span>) {
+                <span class="pl-k">return</span> ngPermissionService.role([<span class="pl-s"><span class="pl-pds">"</span>admin<span class="pl-pds">"</span></span>])
+
+            }]
+        }
+    });</pre></div>
 
 <p>Resolve if role is present:</p>
 
