@@ -2,27 +2,32 @@
 
 // Declare app level module which depends on views, and components
 angular.module('myApp', [
-  'ngRoute',
+  'ui.router',
   'myApp.version',
     'ngPermission'
 ]).
-config(['$routeProvider','ngPermissionProvider', function ($routeProvider,helper) {
-    $routeProvider.when('/view2', {
+config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
+    $stateProvider.state('view2', {
         templateUrl: 'view2/view2.html',
         controller: 'View2Ctrl',
-    }).when('/view1', {
+    }).state('view1', {
         templateUrl: 'view1/view1.html',
         controller: 'View1Ctrl',
-             abstract: true,
-        authorizedRole: ['admin'],
-           resolve: helper.resolveFor('toaster', 'registrationreseller', 'ui.select')
+        url: '/view1',
+        controllerAs: 'registration',
+        resolve: {
+            authorization: ["ngPermissionService", function (ngPermissionService) {
+
+                return ngPermissionService.role(["admin"])
+
+
+            }]
+        }
     });
-    $routeProvider.otherwise({
-        redirectTo: '/view1'
-    });
+    $urlRouterProvider.otherwise('/view1');
 }]).controller('View1Ctrl', [function () {}]).controller('View2Ctrl', [function () {
 
-}]).run(['$rootScope', '$timeout', '$route', function ($rootScope, $timeout, $route) {
+}]).run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
 
     $rootScope.$on('ngPermission', function (event, roles, defer) {
         //alert("inn")

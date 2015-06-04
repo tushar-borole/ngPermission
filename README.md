@@ -2,6 +2,7 @@
 
 Add authorization to angular route, so restriction route to specific tole becomes so easy.
 
+> Note:- Works with **ui.route** as well as **ngRoute** :)
 
 Install via bower:
 ```sh
@@ -18,7 +19,7 @@ Add dependency to you module:
 angular.module("your app name",["ngPermission"])
 ```
 
-Add role permission to route:
+Add role permission to ngRoute:
 ```javascript
 .when('/view1', {
         templateUrl: 'view1/view1.html',
@@ -26,6 +27,22 @@ Add role permission to route:
         authorizedRole: ['admin']
     })
 ```
+
+Add role permission to ui.router:
+```javascript
+ .state('view1', {
+        templateUrl: 'view1/view1.html',
+        controller: 'View1Ctrl',
+        resolve: {
+            authorization: ["ngPermissionService", function (ngPermissionService) {
+                return ngPermissionService.role(["admin"])
+
+            }]
+        }
+    });
+```
+
+
 
 
 Resolve if role is present:
