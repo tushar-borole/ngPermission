@@ -1,6 +1,6 @@
 # ngPermission
 
-Add authorization to angular route, so restriction route to specific tole becomes so easy.
+Add authorization to angular route, so restriction route to specific role becomes so easy.
 
 > Note:- Works with **ui.route** as well as **ngRoute** :)
 
@@ -19,7 +19,7 @@ Add dependency to you module:
 angular.module("your app name",["ngPermission"])
 ```
 
-Add role permission to ngRoute:
+Add role permission to **ngRoute**:
 ```javascript
 .when('/view1', {
         templateUrl: 'view1/view1.html',
@@ -28,7 +28,7 @@ Add role permission to ngRoute:
     })
 ```
 
-Add role permission to ui.router:
+Add role permission to **ui.router**:
 ```javascript
  .state('view1', {
         templateUrl: 'view1/view1.html',
