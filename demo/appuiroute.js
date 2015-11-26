@@ -15,23 +15,17 @@ config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRo
         controller: 'View1Ctrl',
         url: '/view1',
         controllerAs: 'registration',
-        resolve: {
-            authorization: ["ngPermissionService", function (ngPermissionService) {
-
-                return ngPermissionService.role(["admin"])
-
-
-            }]
+        data:{
+            "permission":"admin"
         }
     });
     $urlRouterProvider.otherwise('/view1');
 }]).controller('View1Ctrl', [function () {}]).controller('View2Ctrl', [function () {
 
-}]).run(['$rootScope', '$timeout', function ($rootScope, $timeout) {
+}]).run(['$rootScope', '$timeout','$state', function ($rootScope, $timeout,$state) {
 
-    $rootScope.$on('ngPermission', function (event, roles, defer) {
-        //alert("inn")
-        console.log(roles)
+    $rootScope.$on('ngPermission', function (event, defer,toState, toParams, fromState, fromParams) {
+     console.log(toState)
         $timeout(function () {
             defer.resolve();
         }, 5000)

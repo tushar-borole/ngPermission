@@ -24,12 +24,12 @@ config(['$routeProvider','ngPermissionProvider', function ($routeProvider,helper
 
 }]).run(['$rootScope', '$timeout', '$route', function ($rootScope, $timeout, $route) {
 
-    $rootScope.$on('ngPermission', function (event, roles, defer) {
+    $rootScope.$on('ngPermission', function (event, defer) {
         //alert("inn")
-        console.log(roles)
+        console.log(defer)
         $timeout(function () {
             defer.resolve();
-        }, 5000)
+        }, 2000)
 
         // do what you want to do
     });

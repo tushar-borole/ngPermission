@@ -33,12 +33,7 @@ Add role permission to **ui.router**:
  .state('view1', {
         templateUrl: 'view1/view1.html',
         controller: 'View1Ctrl',
-        resolve: {
-            authorization: ["ngPermissionService", function (ngPermissionService) {
-                return ngPermissionService.role(["admin"])
-
-            }]
-        }
+        authorizedRole: ['admin']
     });
 ```
 
@@ -47,19 +42,17 @@ Add role permission to **ui.router**:
 
 Resolve if role is present:
 ```javascript
-.run(['$rootScope', '$http', '$route', function ($rootScope, $http, $route) {
-    $rootScope.$on('ngPermission', function (event,roles, defer,routeObject) {
-    // do what you want to do
-    //role ["admin"]
-    //routeObject {templateUrl: 'view1/view1.html',controller: 'View1Ctrl',authorizedRole: ['admin']}
-        $http.get('/someUrl').success(function(data){
-         var indexRole = roles.indexOf(data.role);
-         if(indexRole!=-1){
-         defer.resolve();
-         }
-        });
+.run(['$rootScope', '$timeout','$state', function ($rootScope, $timeout,$state) {
+
+    $rootScope.$on('ngPermission', function (event, defer,toState, toParams, fromState, fromParams) {
+     console.log(toState)
+        $timeout(function () {
+            defer.resolve();
+        }, 5000)
+
+        // do what you want to do
     });
-}])
+}]);
 ```
 
 

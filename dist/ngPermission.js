@@ -8,57 +8,69 @@
 
 
 
-var tryModules = function(names) {
-  // accepts a list of module names and
-  // attempts to load them, in order.
+var tryModules = function (names) {
+    // accepts a list of module names and
+    // attempts to load them, in order.
 
-  // if no options remain, throw an error.
-  if( names.length == 0 ) {
-    throw new Error("None of the modules could be loaded.");
-  }
+    // if no options remain, throw an error.
+    if (names.length == 0) {
+        throw new Error("None of the modules could be loaded.");
+    }
 
-  // attempt to load the module into m
-  var m;
-  try {
-    m = angular.module("ngRoute")
-  } catch(err) {
-    m = angular.module("ui.router");
-  }
+    // attempt to load the module into m
+    var m;
+    try {
+        m = angular.module("ngRoute")
+    } catch (err) {
+        m = angular.module("ui.router");
+    }
 
-  // if it could not be loaded, try the rest of
-  // the options. if it was, return it.
-  if( m == null ) return tryModules(names.slice(1));
-  else return m;
+    // if it could not be loaded, try the rest of
+    // the options. if it was, return it.
+    if (m == null) return tryModules(names.slice(1));
+    else return m;
 };
 
-var moduleName=tryModules(["ngRoute", "ui.router"]).name;
+var moduleName = tryModules(["ngRoute", "ui.router"]).name;
 
 
 
-if(moduleName=='ui.router') {//s etting for ui router
-    console.log(angular)
+if (moduleName == 'ui.router') { //setting for ui router
+
 
     angular.module('ui.router');
-    angular.module("ngPermission", []).service('ngPermissionService', function ($rootScope, $state, $q) {
+    angular.module("ngPermission", []).run(
+        function ($rootScope, $urlRouter, $timeout, $q) {
+            // Refuse all state changes
+            var deregisterFunction = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+                event.preventDefault();
+                $timeout(function () {
+                    $rootScope.$emit('ngPermission', deferred, toState, toParams, fromState, fromParams);
+                }, 0);
+            });
 
 
-        this.role = function (role) {
-           
-                // Creates a promise chain for each argument
-            var defer = $q.defer(); // empty promise
-            $rootScope.$broadcast('ngPermission', role, defer, $state.params);
+            // Create a deferred promise, which we will wait to resolve.
+            // Once the promise has been resolved, remove listener and
+            // call `$urlRouter.sync()` to get the route processed again
+            var deferred = $q.defer();
 
-            return defer.promise;
+            deferred.promise.then(function () {
+                deregisterFunction();
+                $urlRouter.sync();
+            });
 
-        };
 
-    })
 
-} 
+        }
+    );
 
-if(moduleName=='ngRoute') {//setting for angualr route
-    
-        angular.module("ngPermission", []).run(['$rootScope', '$http', '$route', function ($rootScope, $http, $route) {
+}
+
+if (moduleName == 'ngRoute') { //setting for angualr route
+
+    angular.module("ngPermission", []).run(['$rootScope', '$http', '$route', function ($rootScope, $http, $route) {
 
         var getRouteResolve = function (config) {
             // create resolve configuration
@@ -92,10 +104,7 @@ if(moduleName=='ngRoute') {//setting for angualr route
 
         });
 }]);
-    
-    
+
+
 
 }
-
-
-
