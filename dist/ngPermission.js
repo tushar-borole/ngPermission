@@ -40,13 +40,22 @@ if (moduleName == 'ui.router') { //setting for ui router
 
     angular.module('ui.router');
     angular.module("ngPermission", []).run(
-        function ($rootScope, $urlRouter, $timeout, $q) {
+        function ($rootScope, $urlRouter, $timeout, $q,$state) {
             // Refuse all state changes
-            var deregisterFunction = $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+            $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
+
+                var resolveFunction = {
+                    "resolve": function () {
+                       //unbindStateChangeEvent();
+                        $state.go(toState, toParams, { notify: false }).then(function() {
+    $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
+});;
+                    }
+                }
 
                 event.preventDefault();
                 $timeout(function () {
-                    $rootScope.$emit('ngPermission', deferred, toState, toParams, fromState, fromParams);
+                    $rootScope.$emit('ngPermission', resolveFunction, toState, toParams, fromState, fromParams);
                 }, 0);
             });
 
@@ -54,13 +63,13 @@ if (moduleName == 'ui.router') { //setting for ui router
             // Create a deferred promise, which we will wait to resolve.
             // Once the promise has been resolved, remove listener and
             // call `$urlRouter.sync()` to get the route processed again
-            var deferred = $q.defer();
+            /* var deferred = $q.defer();
 
             deferred.promise.then(function () {
                 deregisterFunction();
                 $urlRouter.sync();
             });
-
+*/
 
 
         }
