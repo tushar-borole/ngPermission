@@ -40,23 +40,26 @@ if (moduleName == 'ui.router') { //setting for ui router
 
     angular.module('ui.router');
     angular.module("ngPermission", []).run(
-        function ($rootScope, $urlRouter, $timeout, $q,$state) {
+        function ($rootScope, $urlRouter, $timeout, $q, $state) {
             // Refuse all state changes
+
+
+
             $rootScope.$on('$stateChangeStart', function (event, toState, toParams, fromState, fromParams) {
 
-                var resolveFunction = {
-                    "resolve": function () {
-                       //unbindStateChangeEvent();
-                        $state.go(toState, toParams, { notify: false }).then(function() {
-    $rootScope.$broadcast('$stateChangeSuccess', toState, toParams, fromState, fromParams);
-});;
-                    }
-                }
+                toState.resolve.promise = [
+        '$q',
+        function ($q) {
+                        var defer = $q.defer();
+                        $timeout(function () {
+                            $rootScope.$emit('ngPermission', defer, toState, toParams, fromState, fromParams);
+                        }, 0);
+                        return defer.promise;
+        }
+    ]
 
-                event.preventDefault();
-                $timeout(function () {
-                    $rootScope.$emit('ngPermission', resolveFunction, toState, toParams, fromState, fromParams);
-                }, 0);
+
+
             });
 
 
